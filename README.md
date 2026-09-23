@@ -1,50 +1,54 @@
 # LagosPM Portfolio Tracker
 
-Live demo: [https://project-tracker.ramzy.tech/](https://project-tracker.ramzy.tech/)
+A project portfolio dashboard for tracking development pipelines, budgets, risks, and team activity. LagosPM brings portfolio-wide reporting and individual project records into one workspace.
 
+**[Open the live demo](https://project-tracker.ramzy.tech/)** · [Developer guide](DEVELOPMENT.md)
 
-A dependency-light Node.js and SQLite portfolio tracker designed to run behind Nginx on a self-managed Ubuntu VPS.
+## What you can explore
 
-## Included
+- Portfolio dashboard, project register, development pipeline, and cost control.
+- Risk tracking, activity history, search, filters, and CSV exports.
+- Viewer, Editor, and Admin roles with server-enforced permissions.
+- A local Node.js/SQLite application and a Cloudflare Worker/D1 demo implementation.
 
-- Portfolio dashboard, project register, development pipeline, cost control, risk register, activity history, CSV export, and in-app help.
-- Viewer, Editor, and Admin roles with server-side authorization.
-- Password strength enforcement, forced first-login change, CSRF protection, login throttling, expiring sessions, audit logs, and security headers.
-- Versioned SQLite migrations and a transactional Cloudflare D1/SQLite import utility.
-- Nginx, systemd, release, backup, restore, and rollback assets.
+## Try the demo
 
-## Local start
+1. Open the live demo and sign in with a sample account listed below.
+2. Complete the required password-change step, then explore the dashboard and project register.
+3. Inspect project costs and risks or try a CSV export. The public demo uses shared sample records.
 
-Node.js 24 LTS is required.
+## Technology
 
-```bash
+JavaScript, Node.js, SQLite, HTML/CSS, and Cloudflare Workers/D1. Deployment resources for Nginx and systemd are included.
+
+## Run locally
+
+Use Node.js 24 and npm. The following starts the local development database and sample accounts:
+
+```sh
+git clone https://github.com/mena234/lagospm-portfolio-tracker.git
+cd lagospm-portfolio-tracker
 npm ci
-npm test
 npm run db:migrate
 npm run db:seed
 npm start
 ```
 
-The development seed creates `admin@lagospm.local`, `editor@lagospm.local`, and `viewer@lagospm.local`. Their temporary password is `ChangeMe!2026#`; every seeded account must change it at first sign-in. Never enable demo data in production.
+Open **http://127.0.0.1:3210/**. Sample accounts are `admin@lagospm.local`, `editor@lagospm.local`, and `viewer@lagospm.local`; their initial demo password is `ChangeMe!2026#`. Sign-in requires changing it. These credentials are for sample environments only.
 
-Open `http://127.0.0.1:3210`. Configuration is documented in [.env.example](.env.example).
+For the Worker/D1 version, run `npm run dev:site` and open **http://127.0.0.1:8787/**. Production settings are documented in [.env.example](.env.example); production requires a separately supplied administrator password.
 
-## Public Sites demonstration
+## Checks
 
-`npm run build:site` creates the hosted Sites bundle in `dist/`. It contains the production interface, a Cloudflare Worker API, versioned D1 migrations, persistent shared sample data, real sessions, forced password changes, and server-enforced Viewer, Editor, and Admin permissions. Project, cost, risk, activity, user, audit, search, filter, and CSV-export journeys use the same request contract as the Node.js development application.
+```sh
+npm test
+npm run build:site
+```
 
-To run the hosted architecture locally, use `npm run dev:site` and open `http://127.0.0.1:8787`. The command builds the bundle, applies local D1 migrations, and starts the Worker preview. The demonstration accounts use the same identifiers and temporary password listed above; signing in with that shared password always opens the change-password form so the client can repeat the onboarding demonstration.
+## Scope and limitations
 
-The public Site is a demonstration environment: its records are shared by visitors and must not contain real or confidential project information. The self-managed Node.js and SQLite deployment described below remains the production-target installation for private client data.
+The public demo shares records between visitors and is unsuitable for confidential project information. The included data is representative sample data. Migration tooling is provided, but importing and reconciling a real project portfolio requires its source export.
 
-## Production and data migration
+## More detail
 
-- [Ubuntu deployment](docs/DEPLOYMENT.md)
-- [D1/SQLite migration](docs/DATA_MIGRATION.md)
-- [Backup and restore](docs/BACKUP_RESTORE.md)
-- [Rollback](docs/ROLLBACK.md)
-- [Security notes](docs/SECURITY.md)
-- [API summary](docs/API.md)
-- [Acceptance report](docs/ACCEPTANCE_TEST.md)
-
-The supplied brief did not include the original Cloudflare source bundle or its D1 export. The application therefore includes representative development data and a deterministic import path; exact 74-record reconciliation must be run when those source assets are supplied.
+See the [developer guide](DEVELOPMENT.md), [Ubuntu deployment guide](docs/DEPLOYMENT.md), [migration guide](docs/DATA_MIGRATION.md), and [API reference](docs/API.md).
