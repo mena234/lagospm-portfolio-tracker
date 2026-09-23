@@ -1,0 +1,28 @@
+{
+  "name": "lagospm-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node.js and SQLite portfolio project tracker for a self-managed Ubuntu VPS",
+  "type": "module",
+  "engines": {
+    "node": ">=24 <26"
+  },
+  "scripts": {
+    "start": "node src/index.mjs",
+    "dev": "node --watch src/index.mjs",
+    "build:site": "node scripts/build-site.mjs",
+    "dev:site": "npm run build:site && wrangler d1 migrations apply DB --local --config dist/server/wrangler.json && wrangler dev --config dist/server/wrangler.json",
+    "test": "node --test --test-reporter=spec",
+    "test:contrast": "node scripts/check-contrast.mjs",
+    "db:migrate": "node scripts/migrate.mjs",
+    "db:generate:site": "drizzle-kit generate --config=drizzle.config.ts",
+    "db:seed": "node scripts/seed.mjs",
+    "import:d1": "node scripts/import-d1.mjs"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260515.1",
+    "drizzle-kit": "^0.31.10",
+    "drizzle-orm": "^0.45.2",
+    "wrangler": "^4.92.0"
+  }
+}

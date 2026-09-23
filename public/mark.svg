@@ -1,0 +1,6 @@
+<?xml-stylesheet type="text/css" href="/theme-tokens.css?build=20260904b"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LagosPM">
+  <rect width="64" height="64" rx="10" fill="var(--color-accent)"/>
+  <path d="M16 15v34h31v-8H25V15z" fill="var(--color-accent-ink)"/>
+  <path d="M31 15h16v8H31zM31 28h16v8H31z" fill="var(--color-accent-ink)"/>
+</svg>

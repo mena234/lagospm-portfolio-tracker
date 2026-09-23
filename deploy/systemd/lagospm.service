@@ -1,0 +1,34 @@
+[Unit]
+Description=LagosPM Portfolio Tracker
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=lagospm
+Group=lagospm
+WorkingDirectory=/opt/lagospm/current
+EnvironmentFile=/etc/lagospm/lagospm.env
+ExecStart=/usr/bin/node src/index.mjs
+Restart=on-failure
+RestartSec=5s
+TimeoutStopSec=20s
+KillSignal=SIGTERM
+UMask=0027
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+SystemCallArchitectures=native
+ReadWritePaths=/var/lib/lagospm
+
+[Install]
+WantedBy=multi-user.target

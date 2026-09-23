@@ -1,0 +1,26 @@
+{
+  "tables": {
+    "portfolios": {
+      "target": "portfolios",
+      "columns": {}
+    },
+    "project_records": {
+      "target": "projects",
+      "columns": {
+        "project_id": "id",
+        "portfolio": "portfolio_id",
+        "code": "project_code",
+        "title": "name",
+        "manager": "project_manager",
+        "completion": "percent_complete"
+      }
+    },
+    "activity_history": {
+      "target": "project_updates",
+      "columns": {
+        "update_id": "id",
+        "author_id": "created_by"
+      }
+    }
+  }
+}

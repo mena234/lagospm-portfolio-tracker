@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="LagosPM portfolio, cost, risk, and project delivery tracker.">
+    <title>LagosPM Project Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&amp;family=Space+Grotesk:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/tokens.css?build=20260904e">
+    <link rel="stylesheet" href="/styles.css?build=20260904e">
+    <link rel="icon" href="/mark.svg" type="image/svg+xml">
+  </head>
+  <body>
+    <div id="status-region" class="sr-only" role="status" aria-live="polite"></div>
+
+    <main id="login-screen" class="login-shell">
+      <section class="login-intro" aria-labelledby="login-title">
+        <a class="brand brand--large" href="/" aria-label="LagosPM home">
+          <span class="brand__mark" aria-hidden="true">LPM</span>
+          <span>LagosPM</span>
+        </a>
+        <div class="login-intro__copy">
+          <p class="readout">Portfolio control</p>
+          <h1 id="login-title">Projects, costs, decisions.</h1>
+          <p>One dated record for delivery status, development gates, financial exposure, risks, and accountable owners.</p>
+        </div>
+        <dl class="login-path" aria-label="Application request path">
+          <div><dt>Browser</dt><dd>HTTPS</dd></div>
+          <div><dt>Proxy</dt><dd>Nginx</dd></div>
+          <div><dt>Service</dt><dd>localhost</dd></div>
+          <div><dt>Data</dt><dd>SQLite</dd></div>
+        </dl>
+      </section>
+
+      <section class="login-panel" aria-label="Sign in">
+        <form id="login-form" class="form-stack" novalidate>
+          <header class="form-heading">
+            <h2>Sign in</h2>
+            <p>Use your email address or assigned user ID.</p>
+          </header>
+          <label class="field">
+            <span class="field__label">Email address or user ID</span>
+            <input id="login-identifier" name="identifier" autocomplete="username" required maxlength="254" placeholder="tom.admin">
+            <span class="field__message">Your sign-in name is not case-sensitive.</span>
+          </label>
+          <label class="field">
+            <span class="field__label">Password</span>
+            <input name="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="At least 12 characters">
+            <span class="field__message">Five failed attempts lock sign-in for 15 minutes.</span>
+          </label>
+          <p id="login-error" class="form-error" role="alert" hidden></p>
+          <button class="button button--primary" type="submit">
+            <span class="button__label">Sign in securely</span>
+            <span class="button__spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <div id="application" class="app" hidden>
+      <header class="topbar">
+        <a class="brand" href="#overview" data-nav-view="overview" aria-label="LagosPM overview">
+          <span class="brand__mark" aria-hidden="true">LPM</span>
+          <span>LagosPM</span>
+        </a>
+        <button id="command-trigger" class="search-pill" type="button" aria-label="Find a project or view" aria-haspopup="dialog" aria-controls="command-dialog">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg>
+          <span>Find a project or view</span>
+          <kbd>Ctrl K</kbd>
+        </button>
+        <div class="account">
+          <span id="account-name" class="account__name"></span>
+          <span id="account-role" class="badge"></span>
+          <button id="sign-out" class="icon-button" type="button" aria-label="Sign out" data-tooltip="Sign out">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5"></path><path d="M15 12H3"></path><path d="M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"></path></svg>
+          </button>
+        </div>
+      </header>
+
+      <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation">
+        <button class="nav-item is-active" type="button" data-view="overview" aria-current="page">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg><span>Portfolio</span>
+        </button>
+        <button class="nav-item" type="button" data-view="projects">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v14H4z"></path><path d="M8 3v4M16 3v4M4 10h16"></path></svg><span>Projects</span>
+        </button>
+        <button class="nav-item" type="button" data-view="pipeline">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h6v5H4zM14 13h6v5h-6z"></path><path d="M10 8.5h4a3 3 0 0 1 3 3V13"></path></svg><span>Pipeline</span>
+        </button>
+        <button class="nav-item" type="button" data-view="costs">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"></path><path d="m7 15 4-4 3 2 5-6"></path></svg><span>Costs</span>
+        </button>
+        <button class="nav-item" type="button" data-view="risks">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19z"></path><path d="M12 9v4M12 17h.01"></path></svg><span>Risks</span>
+        </button>
+        <button class="nav-item admin-only" type="button" data-view="admin">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4 21a8 8 0 0 1 16 0"></path></svg><span>Admin</span>
+        </button>
+        <button class="nav-item" type="button" data-view="help">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.4 2.4 0 1 1 3.8 2c-1 .7-1.6 1.2-1.6 2.5M12 17h.01"></path></svg><span>Help</span>
+        </button>
+      </nav>
+
+      <main id="workspace" class="workspace" tabindex="-1">
+        <section id="view-overview" class="view" aria-labelledby="overview-title">
+          <header class="view-heading">
+            <div><p class="readout">Portfolio</p><h1 id="overview-title">Delivery position</h1></div>
+            <p id="overview-updated" class="view-heading__meta"></p>
+          </header>
+          <div id="overview-content" class="skeleton-layout" aria-busy="true"></div>
+        </section>
+
+        <section id="view-projects" class="view" aria-labelledby="projects-title" hidden>
+          <header class="view-heading">
+            <div><p class="readout">Register</p><h1 id="projects-title">Projects</h1></div>
+            <div class="view-actions">
+              <a class="button button--quiet" href="/api/export/projects.csv" download>Export CSV</a>
+              <button id="create-project" class="button button--primary editor-only" type="button">Add project</button>
+            </div>
+          </header>
+          <form id="project-filters" class="filter-bar" role="search">
+            <label class="field field--compact">
+              <span class="field__label">Find projects</span>
+              <input name="search" type="search" placeholder="Code, name, location, or manager">
+            </label>
+            <label class="field field--compact"><span class="field__label">Status</span><select name="status"><option value="">All statuses</option></select></label>
+            <label class="field field--compact"><span class="field__label">Phase</span><select name="phase"><option value="">All phases</option></select></label>
+            <button class="button button--quiet" type="submit">Apply filters</button>
+          </form>
+          <div id="project-register"></div>
+        </section>
+
+        <section id="view-pipeline" class="view" aria-labelledby="pipeline-title" hidden>
+          <header class="view-heading"><div><p class="readout">Development</p><h1 id="pipeline-title">Pipeline</h1></div></header>
+          <div id="pipeline-content"></div>
+        </section>
+
+        <section id="view-costs" class="view" aria-labelledby="costs-title" hidden>
+          <header class="view-heading"><div><p class="readout">Cost control</p><h1 id="costs-title">Financial position</h1></div></header>
+          <div id="cost-content"></div>
+        </section>
+
+        <section id="view-risks" class="view" aria-labelledby="risks-title" hidden>
+          <header class="view-heading"><div><p class="readout">Risk register</p><h1 id="risks-title">Open exposure</h1></div></header>
+          <div id="risk-content"></div>
+        </section>
+
+        <section id="view-admin" class="view admin-only" aria-labelledby="admin-title" hidden>
+          <header class="view-heading">
+            <div><p class="readout">Administration</p><h1 id="admin-title">Users and audit</h1></div>
+            <button id="create-user" class="button button--primary" type="button">Add user</button>
+          </header>
+          <div class="admin-grid">
+            <section aria-labelledby="users-heading"><header class="section-heading"><h2 id="users-heading">User directory</h2></header><div id="user-directory"></div></section>
+            <section aria-labelledby="audit-heading"><header class="section-heading"><h2 id="audit-heading">Latest audit entries</h2></header><div id="audit-log"></div></section>
+          </div>
+        </section>
+
+        <section id="view-help" class="view" aria-labelledby="help-title" hidden>
+          <header class="view-heading"><div><p class="readout">Operating guide</p><h1 id="help-title">Help</h1></div><a class="button button--primary" href="/help/LagosPM-Help.pdf" target="_blank" rel="noopener">Open PDF guide</a></header>
+          <div class="help-layout">
+            <article>
+              <h2>Daily workflow</h2>
+              <ol class="steps">
+                <li><strong>Review the portfolio.</strong><span>Scan delivery status, forecast variance, and high-scoring risks.</span></li>
+                <li><strong>Open a project.</strong><span>Use the register or Ctrl K, then review development, costs, risks, and dated history.</span></li>
+                <li><strong>Record the decision.</strong><span>Editors add an activity note after changing project or risk data.</span></li>
+              </ol>
+            </article>
+            <aside>
+              <h2>Role boundaries</h2>
+              <dl class="role-list"><div><dt>Viewer</dt><dd>Reads and exports.</dd></div><div><dt>Editor</dt><dd>Updates delivery records.</dd></div><div><dt>Admin</dt><dd>Manages users and audit access.</dd></div></dl>
+            </aside>
+          </div>
+        </section>
+      </main>
+
+      <footer class="app-footer"><span>LagosPM Project Tracker</span><span>Local SQLite · Dated audit history</span></footer>
+    </div>
+
+    <dialog id="password-dialog" class="dialog" aria-labelledby="password-dialog-title">
+      <form id="password-form" class="dialog__panel form-stack" method="dialog" novalidate>
+        <header class="dialog__heading"><div><p class="readout">Account security</p><h2 id="password-dialog-title">Choose your password</h2></div></header>
+        <p>Your temporary password must be replaced before the tracker can open.</p>
+        <label class="field"><span class="field__label">Current password</span><input name="currentPassword" type="password" autocomplete="current-password" required></label>
+        <label class="field"><span class="field__label">New password</span><input id="new-password" name="newPassword" type="password" autocomplete="new-password" required maxlength="128"><span id="password-guidance" class="field__message">Use 12+ characters with upper and lowercase letters, a number, and a symbol.</span></label>
+        <label class="field"><span class="field__label">Confirm new password</span><input name="confirmPassword" type="password" autocomplete="new-password" required maxlength="128"></label>
+        <p id="password-error" class="form-error" role="alert" hidden></p>
+        <button class="button button--primary" type="submit">Save new password</button>
+      </form>
+    </dialog>
+
+    <dialog id="command-dialog" class="command-dialog" aria-labelledby="command-title">
+      <div class="command-dialog__panel">
+        <label class="command-search"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg><span class="sr-only">Search projects and views</span><input id="command-input" placeholder="Search projects and views" autocomplete="off"><kbd>Esc</kbd></label>
+        <h2 id="command-title" class="sr-only">Search projects and views</h2>
+        <div id="command-results" class="command-results" role="listbox"></div>
+        <footer><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>Enter</kbd> open</span><span><kbd>Esc</kbd> close</span></footer>
+      </div>
+    </dialog>
+
+    <dialog id="project-dialog" class="dialog dialog--wide" aria-labelledby="project-dialog-title">
+      <form id="project-form" class="dialog__panel form-stack" method="dialog" novalidate>
+        <header class="dialog__heading"><div><p class="readout">Project record</p><h2 id="project-dialog-title">Add project</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></svg></button></header>
+        <input name="id" type="hidden"><input name="version" type="hidden">
+        <div class="form-grid">
+          <label class="field"><span class="field__label">Project code</span><input name="project_code" required maxlength="40" placeholder="DEV-024"></label>
+          <label class="field"><span class="field__label">Portfolio</span><select name="portfolio_id" required></select></label>
+          <label class="field field--span"><span class="field__label">Project name</span><input name="name" required maxlength="180"></label>
+          <label class="field"><span class="field__label">Phase</span><select name="phase"></select></label>
+          <label class="field"><span class="field__label">Status</span><select name="status"></select></label>
+          <label class="field"><span class="field__label">Location</span><input name="location" maxlength="120"></label>
+          <label class="field"><span class="field__label">Project manager</span><input name="project_manager" maxlength="120"></label>
+          <label class="field"><span class="field__label">Approved budget</span><input name="budget" type="number" min="0" step="0.01"></label>
+          <label class="field"><span class="field__label">Percent complete</span><input name="percent_complete" type="number" min="0" max="100" step="1"></label>
+          <label class="field"><span class="field__label">Start date</span><input name="start_date" type="date"></label>
+          <label class="field"><span class="field__label">Target date</span><input name="target_date" type="date"></label>
+          <label class="field field--span"><span class="field__label">Description</span><textarea name="description" rows="4" maxlength="20000"></textarea></label>
+        </div>
+        <p id="project-error" class="form-error" role="alert" hidden></p>
+        <footer class="dialog__actions"><button class="button button--quiet" type="button" data-close-dialog>Cancel</button><button class="button button--primary" type="submit">Save project</button></footer>
+      </form>
+    </dialog>
+
+    <dialog id="detail-dialog" class="dialog dialog--detail" aria-labelledby="detail-title">
+      <div class="dialog__panel">
+        <header class="dialog__heading detail-heading"><div><p id="detail-code" class="readout"></p><h2 id="detail-title">Project</h2><p id="detail-summary"></p></div><button class="icon-button" type="button" data-close-dialog aria-label="Close"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></svg></button></header>
+        <div id="detail-tabs" class="tabs" role="tablist" aria-label="Project detail"></div>
+        <div id="detail-content"></div>
+      </div>
+    </dialog>
+
+    <dialog id="user-dialog" class="dialog" aria-labelledby="user-dialog-title">
+      <form id="user-form" class="dialog__panel form-stack" method="dialog" novalidate>
+        <header class="dialog__heading"><div><p class="readout">User directory</p><h2 id="user-dialog-title">Add user</h2></div><button class="icon-button" type="button" data-close-dialog aria-label="Close"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></svg></button></header>
+        <label class="field"><span class="field__label">Display name</span><input name="displayName" required maxlength="180"></label>
+        <label class="field"><span class="field__label">User ID</span><input name="userId" required maxlength="80" placeholder="first.last"></label>
+        <label class="field"><span class="field__label">Email address</span><input name="email" type="email" required maxlength="254"></label>
+        <label class="field"><span class="field__label">Role</span><select name="role"><option>Viewer</option><option>Editor</option><option>Admin</option></select></label>
+        <p class="field__message">A strong temporary password is generated and displayed once.</p>
+        <p id="user-error" class="form-error" role="alert" hidden></p>
+        <footer class="dialog__actions"><button class="button button--quiet" type="button" data-close-dialog>Cancel</button><button class="button button--primary" type="submit">Create user</button></footer>
+      </form>
+    </dialog>
+
+    <div id="toast-stack" class="toast-stack" aria-live="polite" aria-relevant="additions"></div>
+    <script type="module" src="/app.js?build=20260904e"></script>
+  </body>
+</html>
